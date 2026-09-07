@@ -1,0 +1,13 @@
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# editors
+.vscode/
+.idea/
+
+# scratch
+_review.html
+_scrolled.html
+*.log
