@@ -39,7 +39,7 @@ brand/                  original source files (masters, not served)
 | Shipped file | Derived from | How |
 |---|---|---|
 | `maat-portrait.webp` | `portrait-transparent-original.png` | client-supplied transparent PNG, trimmed to bbox and encoded |
-| `the-room.webp` | `the-room-original.png` | workshop group photo, encoded |
+| `the-room.webp` | `the-room-transparent-original.png` | client-supplied transparent cut-out of the workshop group, resized to 1300px |
 | `logo-mark.png` / `logo-word.png` / `logo-full.png` | `logo-original.jpg` | white background keyed out and un-matted to transparency |
 
 `brand/` also holds `portrait-on-black.png` and `portrait-original.jpeg`, two earlier
