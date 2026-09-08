@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neon prototypes — Love Ma'at</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;background:#0d0b12;color:#fff}
+.row{display:grid;grid-template-columns:repeat(3,1fr);min-height:100vh}
+@media(max-width:1100px){.row{grid-template-columns:1fr}}
+
+.side{position:relative;overflow:hidden;isolation:isolate}
+.tag{position:absolute;top:16px;left:16px;z-index:9;font-size:.62rem;font-weight:800;
+  letter-spacing:.14em;text-transform:uppercase;padding:.45em .9em;border-radius:100px}
+
+.copy{position:absolute;left:clamp(1rem,2.5vw,1.7rem);bottom:clamp(1.2rem,5vh,2.2rem);
+  z-index:8;max-width:15rem}
+.copy h2{margin:0 0 .45rem;font-size:clamp(1.25rem,1.7vw,1.6rem);font-weight:800;
+  line-height:1.08;letter-spacing:-.03em}
+.copy p{margin:0;font-size:.78rem;line-height:1.5}
+
+.stage{position:relative;z-index:4;height:100vh;display:flex;
+  align-items:flex-end;justify-content:flex-end;padding-right:clamp(0rem,1.5vw,1.5rem)}
+/* sized in vh: a percentage height against an auto-height parent is circular */
+.shot{position:relative;display:block;height:74vh;aspect-ratio:1024/1536}
+.shot > img{display:block;height:100%;width:auto;position:relative;z-index:3}
+/* glow on a duplicate layer so we animate opacity, not filter (repaint) */
+.glow{position:absolute;inset:0;z-index:1;pointer-events:none}
+.glow img{display:block;height:100%;width:auto}
+@keyframes breathe{0%,100%{opacity:.55}50%{opacity:1}}
+
+.trace{position:absolute;inset:0;width:100%;height:100%;overflow:visible;
+  pointer-events:none;z-index:5}
+.trace path{fill:none;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:150 1000;animation:travel 4.2s linear infinite}
+@keyframes travel{from{stroke-dashoffset:1150}to{stroke-dashoffset:0}}
+
+/* ---------- A: light panel, saturated streak ---------- */
+.A{background:linear-gradient(112deg,#FBD2E7 0%,#F6D3F2 38%,#E3D6FD 72%,#D6E0FE 100%)}
+.A .tag{background:#160F1D;color:#fff}
+.A .copy h2{color:#160F1D}.A .copy p{color:#4A4157}.A .copy em{color:#D4399A;font-style:normal}
+.A .glow img{filter:drop-shadow(0 0 6px #E179DC) drop-shadow(0 0 22px #B086FE)
+   drop-shadow(0 0 44px #6DA5FE);animation:breathe 5.5s ease-in-out infinite}
+.A .halo{stroke:#B086FE;stroke-width:22;opacity:.8;filter:blur(11px)}
+.A .core{stroke:#D4399A;stroke-width:5.5}
+.A .hot {stroke:#fff;stroke-width:1.5;opacity:.9}
+
+/* ---------- B: dark panel, true neon ---------- */
+.B{background:
+   radial-gradient(70% 60% at 62% 42%,#3B1E52 0%,transparent 70%),
+   linear-gradient(150deg,#1A0C24 0%,#120A1C 55%,#0B0711 100%)}
+.B .tag{background:#FE70C0;color:#160F1D}
+.B .copy h2{color:#FBF7FD}.B .copy p{color:#B9AEC8}.B .copy em{color:#FE70C0;font-style:normal}
+.B .glow img{filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 16px #FE70C0)
+   drop-shadow(0 0 46px #B086FE) drop-shadow(0 0 90px #6DA5FE);
+   animation:breathe 5.5s ease-in-out infinite}
+.B .halo{stroke:#FE70C0;stroke-width:22;opacity:.85;filter:blur(13px)}
+.B .core{stroke:#FFC7E8;stroke-width:6}
+.B .hot {stroke:#fff;stroke-width:2}
+
+/* ---------- C: light panel + local plum pool ---------- */
+.C{background:linear-gradient(112deg,#FBD2E7 0%,#F6D3F2 38%,#E3D6FD 72%,#D6E0FE 100%)}
+.C .tag{background:#160F1D;color:#fff}
+.C .copy h2{color:#160F1D}.C .copy p{color:#4A4157}.C .copy em{color:#D4399A;font-style:normal}
+/* multiply darkens the existing wash in-hue instead of pasting a grey blob on
+   top of it; the headline side stays pink because the pool is centred on her */
+.C .pool{position:absolute;z-index:2;pointer-events:none;
+  top:3%;right:-14%;width:100%;height:94%;
+  background:radial-gradient(closest-side,
+     rgba(54,20,76,.94) 0%, rgba(92,42,120,.8) 36%,
+     rgba(148,108,178,.4) 62%, rgba(190,160,210,0) 80%);
+  mix-blend-mode:multiply;filter:blur(8px)}
+.C .glow img{filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 16px #FE70C0)
+   drop-shadow(0 0 44px #B086FE) drop-shadow(0 0 80px #6DA5FE);
+   animation:breathe 5.5s ease-in-out infinite}
+.C .halo{stroke:#FE70C0;stroke-width:22;opacity:.85;filter:blur(12px)}
+.C .core{stroke:#FFD4EE;stroke-width:5.5}
+.C .hot {stroke:#fff;stroke-width:2}
+
+@media (prefers-reduced-motion:reduce){
+  .trace path,.glow img,.pool{animation:none}
+  .trace path{stroke-dasharray:none;opacity:.5}
+}
+</style>
+</head>
+<body>
+<div class="row">
+  <section class="side A">
+    <span class="tag">A &nbsp;·&nbsp; light panel</span>
+    
+    <div class="copy">
+      <h2>Real Intimacy Starts When You <em>Stop Pretending.</em></h2>
+      <p>Rim bloom reads, but the travelling segment competes with it.</p>
+    </div>
+    <div class="stage"><div class="shot">
+      <div class="glow" aria-hidden="true"><img src="assets/img/maat-portrait.webp" alt=""></div>
+      <img src="assets/img/maat-portrait.webp" alt="Dr. Love Ma'at">
+      <svg class="trace" viewBox="0 0 1024 1536" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <path class="halo" pathLength="1000" d="M170.8,1416.0 L158.0,1340.0 L158.8,1292.0 L167.1,1244.0 L189.6,1176.0 L200.9,1160.0 L156.0,1162.8 L132.0,1146.2 L104.0,1142.2 L59.8,1104.0 L62.9,1068.0 L35.2,1044.0 L22.7,1024.0 L20.7,992.0 L29.0,980.0 L29.9,968.0 L5.3,900.0 L46.0,820.0 L34.8,792.0 L31.6,768.0 L43.4,744.0 L80.8,704.0 L95.1,640.0 L142.8,556.0 L220.0,452.0 L244.0,439.8 L293.6,436.0 L286.7,400.0 L293.8,368.0 L325.7,280.0 L354.7,164.0 L378.5,108.0 L402.0,68.0 L433.4,36.0 L460.0,19.7 L492.0,11.3 L528.0,9.1 L568.0,14.8 L624.0,50.3 L644.9,76.0 L666.2,116.0 L705.4,284.0 L703.2,388.0 L710.8,420.0 L736.7,444.0 L788.0,468.9 L808.0,450.8 L832.0,448.8 L848.0,478.6 L900.0,499.3 L924.8,520.0 L933.0,532.0 L934.9,572.0 L956.8,612.0 L961.3,680.0 L999.4,732.0 L990.4,780.0 L994.2,840.0 L1013.4,876.0 L1014.2,896.0 L994.7,956.0 L985.3,1024.0 L961.6,1088.0 L948.0,1101.8 L928.0,1108.5 L864.0,1164.4 L844.0,1173.6 L820.0,1174.9 L780.0,1197.1 L763.7,1200.0 L785.2,1244.0 L786.2,1260.0 L804.9,1300.0 L804.6,1312.0 L824.8,1368.0"/>
+        <path class="core" pathLength="1000" d="M170.8,1416.0 L158.0,1340.0 L158.8,1292.0 L167.1,1244.0 L189.6,1176.0 L200.9,1160.0 L156.0,1162.8 L132.0,1146.2 L104.0,1142.2 L59.8,1104.0 L62.9,1068.0 L35.2,1044.0 L22.7,1024.0 L20.7,992.0 L29.0,980.0 L29.9,968.0 L5.3,900.0 L46.0,820.0 L34.8,792.0 L31.6,768.0 L43.4,744.0 L80.8,704.0 L95.1,640.0 L142.8,556.0 L220.0,452.0 L244.0,439.8 L293.6,436.0 L286.7,400.0 L293.8,368.0 L325.7,280.0 L354.7,164.0 L378.5,108.0 L402.0,68.0 L433.4,36.0 L460.0,19.7 L492.0,11.3 L528.0,9.1 L568.0,14.8 L624.0,50.3 L644.9,76.0 L666.2,116.0 L705.4,284.0 L703.2,388.0 L710.8,420.0 L736.7,444.0 L788.0,468.9 L808.0,450.8 L832.0,448.8 L848.0,478.6 L900.0,499.3 L924.8,520.0 L933.0,532.0 L934.9,572.0 L956.8,612.0 L961.3,680.0 L999.4,732.0 L990.4,780.0 L994.2,840.0 L1013.4,876.0 L1014.2,896.0 L994.7,956.0 L985.3,1024.0 L961.6,1088.0 L948.0,1101.8 L928.0,1108.5 L864.0,1164.4 L844.0,1173.6 L820.0,1174.9 L780.0,1197.1 L763.7,1200.0 L785.2,1244.0 L786.2,1260.0 L804.9,1300.0 L804.6,1312.0 L824.8,1368.0"/>
+        <path class="hot"  pathLength="1000" d="M170.8,1416.0 L158.0,1340.0 L158.8,1292.0 L167.1,1244.0 L189.6,1176.0 L200.9,1160.0 L156.0,1162.8 L132.0,1146.2 L104.0,1142.2 L59.8,1104.0 L62.9,1068.0 L35.2,1044.0 L22.7,1024.0 L20.7,992.0 L29.0,980.0 L29.9,968.0 L5.3,900.0 L46.0,820.0 L34.8,792.0 L31.6,768.0 L43.4,744.0 L80.8,704.0 L95.1,640.0 L142.8,556.0 L220.0,452.0 L244.0,439.8 L293.6,436.0 L286.7,400.0 L293.8,368.0 L325.7,280.0 L354.7,164.0 L378.5,108.0 L402.0,68.0 L433.4,36.0 L460.0,19.7 L492.0,11.3 L528.0,9.1 L568.0,14.8 L624.0,50.3 L644.9,76.0 L666.2,116.0 L705.4,284.0 L703.2,388.0 L710.8,420.0 L736.7,444.0 L788.0,468.9 L808.0,450.8 L832.0,448.8 L848.0,478.6 L900.0,499.3 L924.8,520.0 L933.0,532.0 L934.9,572.0 L956.8,612.0 L961.3,680.0 L999.4,732.0 L990.4,780.0 L994.2,840.0 L1013.4,876.0 L1014.2,896.0 L994.7,956.0 L985.3,1024.0 L961.6,1088.0 L948.0,1101.8 L928.0,1108.5 L864.0,1164.4 L844.0,1173.6 L820.0,1174.9 L780.0,1197.1 L763.7,1200.0 L785.2,1244.0 L786.2,1260.0 L804.9,1300.0 L804.6,1312.0 L824.8,1368.0"/>
+      </svg>
+    </div></div>
+  </section>
+  <section class="side B">
+    <span class="tag">B &nbsp;·&nbsp; dark panel</span>
+    
+    <div class="copy">
+      <h2>Real Intimacy Starts When You <em>Stop Pretending.</em></h2>
+      <p>Strongest motion. Costs the light, airy top of the page.</p>
+    </div>
+    <div class="stage"><div class="shot">
+      <div class="glow" aria-hidden="true"><img src="assets/img/maat-portrait.webp" alt=""></div>
+      <img src="assets/img/maat-portrait.webp" alt="Dr. Love Ma'at">
+      <svg class="trace" viewBox="0 0 1024 1536" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <path class="halo" pathLength="1000" d="M170.8,1416.0 L158.0,1340.0 L158.8,1292.0 L167.1,1244.0 L189.6,1176.0 L200.9,1160.0 L156.0,1162.8 L132.0,1146.2 L104.0,1142.2 L59.8,1104.0 L62.9,1068.0 L35.2,1044.0 L22.7,1024.0 L20.7,992.0 L29.0,980.0 L29.9,968.0 L5.3,900.0 L46.0,820.0 L34.8,792.0 L31.6,768.0 L43.4,744.0 L80.8,704.0 L95.1,640.0 L142.8,556.0 L220.0,452.0 L244.0,439.8 L293.6,436.0 L286.7,400.0 L293.8,368.0 L325.7,280.0 L354.7,164.0 L378.5,108.0 L402.0,68.0 L433.4,36.0 L460.0,19.7 L492.0,11.3 L528.0,9.1 L568.0,14.8 L624.0,50.3 L644.9,76.0 L666.2,116.0 L705.4,284.0 L703.2,388.0 L710.8,420.0 L736.7,444.0 L788.0,468.9 L808.0,450.8 L832.0,448.8 L848.0,478.6 L900.0,499.3 L924.8,520.0 L933.0,532.0 L934.9,572.0 L956.8,612.0 L961.3,680.0 L999.4,732.0 L990.4,780.0 L994.2,840.0 L1013.4,876.0 L1014.2,896.0 L994.7,956.0 L985.3,1024.0 L961.6,1088.0 L948.0,1101.8 L928.0,1108.5 L864.0,1164.4 L844.0,1173.6 L820.0,1174.9 L780.0,1197.1 L763.7,1200.0 L785.2,1244.0 L786.2,1260.0 L804.9,1300.0 L804.6,1312.0 L824.8,1368.0"/>
+        <path class="core" pathLength="1000" d="M170.8,1416.0 L158.0,1340.0 L158.8,1292.0 L167.1,1244.0 L189.6,1176.0 L200.9,1160.0 L156.0,1162.8 L132.0,1146.2 L104.0,1142.2 L59.8,1104.0 L62.9,1068.0 L35.2,1044.0 L22.7,1024.0 L20.7,992.0 L29.0,980.0 L29.9,968.0 L5.3,900.0 L46.0,820.0 L34.8,792.0 L31.6,768.0 L43.4,744.0 L80.8,704.0 L95.1,640.0 L142.8,556.0 L220.0,452.0 L244.0,439.8 L293.6,436.0 L286.7,400.0 L293.8,368.0 L325.7,280.0 L354.7,164.0 L378.5,108.0 L402.0,68.0 L433.4,36.0 L460.0,19.7 L492.0,11.3 L528.0,9.1 L568.0,14.8 L624.0,50.3 L644.9,76.0 L666.2,116.0 L705.4,284.0 L703.2,388.0 L710.8,420.0 L736.7,444.0 L788.0,468.9 L808.0,450.8 L832.0,448.8 L848.0,478.6 L900.0,499.3 L924.8,520.0 L933.0,532.0 L934.9,572.0 L956.8,612.0 L961.3,680.0 L999.4,732.0 L990.4,780.0 L994.2,840.0 L1013.4,876.0 L1014.2,896.0 L994.7,956.0 L985.3,1024.0 L961.6,1088.0 L948.0,1101.8 L928.0,1108.5 L864.0,1164.4 L844.0,1173.6 L820.0,1174.9 L780.0,1197.1 L763.7,1200.0 L785.2,1244.0 L786.2,1260.0 L804.9,1300.0 L804.6,1312.0 L824.8,1368.0"/>
+        <path class="hot"  pathLength="1000" d="M170.8,1416.0 L158.0,1340.0 L158.8,1292.0 L167.1,1244.0 L189.6,1176.0 L200.9,1160.0 L156.0,1162.8 L132.0,1146.2 L104.0,1142.2 L59.8,1104.0 L62.9,1068.0 L35.2,1044.0 L22.7,1024.0 L20.7,992.0 L29.0,980.0 L29.9,968.0 L5.3,900.0 L46.0,820.0 L34.8,792.0 L31.6,768.0 L43.4,744.0 L80.8,704.0 L95.1,640.0 L142.8,556.0 L220.0,452.0 L244.0,439.8 L293.6,436.0 L286.7,400.0 L293.8,368.0 L325.7,280.0 L354.7,164.0 L378.5,108.0 L402.0,68.0 L433.4,36.0 L460.0,19.7 L492.0,11.3 L528.0,9.1 L568.0,14.8 L624.0,50.3 L644.9,76.0 L666.2,116.0 L705.4,284.0 L703.2,388.0 L710.8,420.0 L736.7,444.0 L788.0,468.9 L808.0,450.8 L832.0,448.8 L848.0,478.6 L900.0,499.3 L924.8,520.0 L933.0,532.0 L934.9,572.0 L956.8,612.0 L961.3,680.0 L999.4,732.0 L990.4,780.0 L994.2,840.0 L1013.4,876.0 L1014.2,896.0 L994.7,956.0 L985.3,1024.0 L961.6,1088.0 L948.0,1101.8 L928.0,1108.5 L864.0,1164.4 L844.0,1173.6 L820.0,1174.9 L780.0,1197.1 L763.7,1200.0 L785.2,1244.0 L786.2,1260.0 L804.9,1300.0 L804.6,1312.0 L824.8,1368.0"/>
+      </svg>
+    </div></div>
+  </section>
+  <section class="side C">
+    <span class="tag">C &nbsp;·&nbsp; light panel + plum pool</span>
+    <div class="pool" aria-hidden="true"></div>
+    <div class="copy">
+      <h2>Real Intimacy Starts When You <em>Stop Pretending.</em></h2>
+      <p>Pink hero kept. She stands in a pool of deeper plum so the neon has local contrast.</p>
+    </div>
+    <div class="stage"><div class="shot">
+      <div class="glow" aria-hidden="true"><img src="assets/img/maat-portrait.webp" alt=""></div>
+      <img src="assets/img/maat-portrait.webp" alt="Dr. Love Ma'at">
+      <svg class="trace" viewBox="0 0 1024 1536" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <path class="halo" pathLength="1000" d="M170.8,1416.0 L158.0,1340.0 L158.8,1292.0 L167.1,1244.0 L189.6,1176.0 L200.9,1160.0 L156.0,1162.8 L132.0,1146.2 L104.0,1142.2 L59.8,1104.0 L62.9,1068.0 L35.2,1044.0 L22.7,1024.0 L20.7,992.0 L29.0,980.0 L29.9,968.0 L5.3,900.0 L46.0,820.0 L34.8,792.0 L31.6,768.0 L43.4,744.0 L80.8,704.0 L95.1,640.0 L142.8,556.0 L220.0,452.0 L244.0,439.8 L293.6,436.0 L286.7,400.0 L293.8,368.0 L325.7,280.0 L354.7,164.0 L378.5,108.0 L402.0,68.0 L433.4,36.0 L460.0,19.7 L492.0,11.3 L528.0,9.1 L568.0,14.8 L624.0,50.3 L644.9,76.0 L666.2,116.0 L705.4,284.0 L703.2,388.0 L710.8,420.0 L736.7,444.0 L788.0,468.9 L808.0,450.8 L832.0,448.8 L848.0,478.6 L900.0,499.3 L924.8,520.0 L933.0,532.0 L934.9,572.0 L956.8,612.0 L961.3,680.0 L999.4,732.0 L990.4,780.0 L994.2,840.0 L1013.4,876.0 L1014.2,896.0 L994.7,956.0 L985.3,1024.0 L961.6,1088.0 L948.0,1101.8 L928.0,1108.5 L864.0,1164.4 L844.0,1173.6 L820.0,1174.9 L780.0,1197.1 L763.7,1200.0 L785.2,1244.0 L786.2,1260.0 L804.9,1300.0 L804.6,1312.0 L824.8,1368.0"/>
+        <path class="core" pathLength="1000" d="M170.8,1416.0 L158.0,1340.0 L158.8,1292.0 L167.1,1244.0 L189.6,1176.0 L200.9,1160.0 L156.0,1162.8 L132.0,1146.2 L104.0,1142.2 L59.8,1104.0 L62.9,1068.0 L35.2,1044.0 L22.7,1024.0 L20.7,992.0 L29.0,980.0 L29.9,968.0 L5.3,900.0 L46.0,820.0 L34.8,792.0 L31.6,768.0 L43.4,744.0 L80.8,704.0 L95.1,640.0 L142.8,556.0 L220.0,452.0 L244.0,439.8 L293.6,436.0 L286.7,400.0 L293.8,368.0 L325.7,280.0 L354.7,164.0 L378.5,108.0 L402.0,68.0 L433.4,36.0 L460.0,19.7 L492.0,11.3 L528.0,9.1 L568.0,14.8 L624.0,50.3 L644.9,76.0 L666.2,116.0 L705.4,284.0 L703.2,388.0 L710.8,420.0 L736.7,444.0 L788.0,468.9 L808.0,450.8 L832.0,448.8 L848.0,478.6 L900.0,499.3 L924.8,520.0 L933.0,532.0 L934.9,572.0 L956.8,612.0 L961.3,680.0 L999.4,732.0 L990.4,780.0 L994.2,840.0 L1013.4,876.0 L1014.2,896.0 L994.7,956.0 L985.3,1024.0 L961.6,1088.0 L948.0,1101.8 L928.0,1108.5 L864.0,1164.4 L844.0,1173.6 L820.0,1174.9 L780.0,1197.1 L763.7,1200.0 L785.2,1244.0 L786.2,1260.0 L804.9,1300.0 L804.6,1312.0 L824.8,1368.0"/>
+        <path class="hot"  pathLength="1000" d="M170.8,1416.0 L158.0,1340.0 L158.8,1292.0 L167.1,1244.0 L189.6,1176.0 L200.9,1160.0 L156.0,1162.8 L132.0,1146.2 L104.0,1142.2 L59.8,1104.0 L62.9,1068.0 L35.2,1044.0 L22.7,1024.0 L20.7,992.0 L29.0,980.0 L29.9,968.0 L5.3,900.0 L46.0,820.0 L34.8,792.0 L31.6,768.0 L43.4,744.0 L80.8,704.0 L95.1,640.0 L142.8,556.0 L220.0,452.0 L244.0,439.8 L293.6,436.0 L286.7,400.0 L293.8,368.0 L325.7,280.0 L354.7,164.0 L378.5,108.0 L402.0,68.0 L433.4,36.0 L460.0,19.7 L492.0,11.3 L528.0,9.1 L568.0,14.8 L624.0,50.3 L644.9,76.0 L666.2,116.0 L705.4,284.0 L703.2,388.0 L710.8,420.0 L736.7,444.0 L788.0,468.9 L808.0,450.8 L832.0,448.8 L848.0,478.6 L900.0,499.3 L924.8,520.0 L933.0,532.0 L934.9,572.0 L956.8,612.0 L961.3,680.0 L999.4,732.0 L990.4,780.0 L994.2,840.0 L1013.4,876.0 L1014.2,896.0 L994.7,956.0 L985.3,1024.0 L961.6,1088.0 L948.0,1101.8 L928.0,1108.5 L864.0,1164.4 L844.0,1173.6 L820.0,1174.9 L780.0,1197.1 L763.7,1200.0 L785.2,1244.0 L786.2,1260.0 L804.9,1300.0 L804.6,1312.0 L824.8,1368.0"/>
+      </svg>
+    </div></div>
+  </section>
+</div>
+</body>
+</html>
