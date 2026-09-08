@@ -1,0 +1,16 @@
+{
+  "name": "love-maat-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personal brand site for Dr. Love Ma'at — celebrity intimacy coach, speaker, author and producer.",
+  "homepage": "https://lovemaat.com",
+  "type": "module",
+  "scripts": {
+    "dev": "node tools/dev.mjs",
+    "dev:open": "node tools/dev.mjs --open",
+    "start": "node tools/dev.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

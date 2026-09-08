@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "lovemaat",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "5173"],
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["tools/dev.mjs"],
       "port": 5173
     }
   ]

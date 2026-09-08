@@ -13,10 +13,35 @@ Static HTML/CSS/JS. No build step, no dependencies, no framework. Open
 ## Run locally
 
 ```bash
-python -m http.server 5173
+npm run dev
 ```
 
-Then open <http://localhost:5173>. Any static server works — the site is just files.
+Then open <http://localhost:5173>. No install step — there are no dependencies
+to fetch; the dev server is a single Node file using only the standard library.
+
+It exists because two things bite when you serve this folder with a plain static
+server:
+
+- **Cache-Control: no-store** on every response. Browsers hold on to a stylesheet
+  hard enough that an edit appears not to have worked, which costs more time than
+  it sounds like.
+- **Live reload.** A CSS edit swaps the `<link>` in place and keeps your scroll
+  position, so you can tweak a section two thirds down the page without being
+  thrown back to the top. Any other change reloads the tab.
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | serve on 5173, live reload on |
+| `npm run dev:open` | same, and opens your browser |
+| `node tools/dev.mjs --port 8080` | pick a port (auto-steps if busy) |
+| `node tools/dev.mjs --no-reload` | plain static serving, no injection |
+
+Edits under `brand/` don't trigger reloads — those are multi-megabyte masters,
+not site files.
+
+The site itself is still just files, so any static server works if you'd rather:
+`python -m http.server 5173` or `npx serve`. You only lose the two conveniences
+above.
 
 ---
 
@@ -29,8 +54,13 @@ assets/
   js/main.js            nav, scroll reveal, mobile menu, signup validation
   img/                  web-optimised, shipped assets
 brand/                  original source files (masters, not served)
+tools/dev.mjs           local dev server (no dependencies)
+package.json            scripts only — no dependencies
 .claude/launch.json     local dev-server config
 ```
+
+`package.json` has **no `dependencies` or `devDependencies`** and there is no
+lockfile. `npm install` is never needed. It is there for `npm run dev`.
 
 ### Brand assets
 

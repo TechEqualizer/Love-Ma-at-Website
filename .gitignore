@@ -7,6 +7,10 @@ desktop.ini
 .vscode/
 .idea/
 
+# node
+node_modules/
+npm-debug.log*
+
 # scratch
 _review.html
 _scrolled.html
