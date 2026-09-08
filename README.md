@@ -41,7 +41,6 @@ brand/                  original source files (masters, not served)
 | `maat-portrait.webp` | `portrait-transparent-original.png` | client-supplied transparent PNG, trimmed to bbox and encoded |
 | `the-room.webp` | `the-room-original.png` | workshop group photo, encoded |
 | `logo-mark.png` / `logo-word.png` / `logo-full.png` | `logo-original.jpg` | white background keyed out and un-matted to transparency |
-| `silhouette-path.txt` | `maat-portrait.webp` | her outline traced from the alpha channel, simplified to ~75 points, bottom crop line removed so it strokes as an open path |
 
 `brand/` also holds `portrait-on-black.png` and `portrait-original.jpeg`, two earlier
 versions of the same shot. **Always ask the client for a transparent PNG rather than
