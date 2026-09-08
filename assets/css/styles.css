@@ -401,18 +401,30 @@ p:last-child{margin-bottom:0}
   .foot__inner{grid-template-columns:1fr 1fr}
   .foot__brand{grid-column:1/-1}
 
-  /* Portrait becomes a bottom-anchored backdrop so the copy still clears the
-     fold — stacked underneath, it pushed the headline off-screen. */
-  .hero__grid{grid-template-columns:1fr}
-  .hero__copy{position:relative;z-index:2;
-    padding-block:clamp(5.5rem,15svh,8rem) clamp(2rem,7svh,4rem)}
-  .hero__portrait{position:absolute;right:-8%;bottom:0;z-index:0;
-    width:70%;max-width:340px;opacity:.55;pointer-events:none}
-  .hero__portrait img{max-height:56svh;
-    -webkit-mask-image:linear-gradient(180deg,#000 62%,transparent 96%);
-    mask-image:linear-gradient(180deg,#000 62%,transparent 96%)}
-  .hero__ghost{font-size:clamp(6rem,26vw,13rem)}
-  .hero__signature{font-size:clamp(1.3rem,6vw,2.4rem)}
+  /* Single column: copy on top, portrait filling whatever height is left and
+     bleeding off the panel's bottom edge. Floating her behind the copy as a
+     faded backdrop put her face under the headline and read as an accident. */
+  .hero__panel{align-items:stretch}
+  .hero__grid{display:flex;flex-direction:column;height:100svh;gap:0}
+  .hero__copy{flex:0 0 auto;position:relative;z-index:2;
+    padding-block:clamp(5rem,13svh,6.5rem) clamp(1rem,2.5svh,1.75rem)}
+  .hero__portrait{flex:1 1 auto;min-height:0;position:relative;z-index:1;
+    width:auto;max-width:none;opacity:1;margin:0;pointer-events:none;
+    display:flex;align-items:flex-end;justify-content:flex-end}
+  /* height:100% (not max-height) resolves against the flex-sized figure;
+     max-width + contain then keeps her inside the panel on short screens
+     instead of overflowing and being clipped */
+  .hero__portrait img{height:100%;width:auto;max-width:100%;
+    object-fit:contain;object-position:bottom right;
+    -webkit-mask-image:none;mask-image:none}
+
+  /* the giant wordmark gets clipped by the panel edge at this width and
+     fights the headline for the same space */
+  .hero__ghost{display:none}
+  .hero__signature{left:var(--pad);right:auto;bottom:clamp(.5rem,2svh,1.1rem);
+    font-size:clamp(1.05rem,4.6vw,1.6rem);color:rgba(255,255,255,.55)}
+  /* reads as a smudge beside the headline at this size */
+  .petals{display:none}
 }
 
 @media (max-width:640px){
@@ -431,7 +443,6 @@ p:last-child{margin-bottom:0}
 
 /* very short viewports: keep the hero honest about the fold */
 @media (max-height:700px) and (max-width:1000px){
-  .hero__copy{padding-block:clamp(5rem,13svh,6.5rem) 1.5rem}
+  .hero__copy{padding-block:clamp(4.25rem,11svh,5.5rem) .9rem}
   .hero .lede{font-size:.9rem}
-  .hero__portrait img{max-height:46svh}
 }
